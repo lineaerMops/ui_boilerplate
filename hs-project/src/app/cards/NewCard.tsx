@@ -53,6 +53,9 @@ const Extension = ({ context, actions }) => {
     <Flex direction="column" gap="small">
       <Text format={{ fontWeight: "bold" }}>Ticket ID</Text>
       <Text>{recordId || "-"}</Text>
+      <Text format={{ color: "secondary" }}>
+        Debug context: {JSON.stringify(context)}
+      </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
