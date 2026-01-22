@@ -4,7 +4,7 @@
   "config": {
     "name": "Ticket Bug Card",
     "location": "crm.record.sidebar",
-    "entrypoint": "/app/cards/NewCard.tsx",
+    "entrypoint": "/app/cards/TicketBugCard.tsx",
     "objectTypes": [
       "tickets"
     ]

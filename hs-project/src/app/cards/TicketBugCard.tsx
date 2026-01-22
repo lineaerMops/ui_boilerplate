@@ -3,10 +3,10 @@ import { Button, Flex, Text } from "@hubspot/ui-extensions";
 import { hubspot } from "@hubspot/ui-extensions";
 
 hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
-  <Extension context={context} actions={actions} />
+  <TicketBugCard context={context} actions={actions} />
 ));
 
-const Extension = ({ context, actions }) => {
+const TicketBugCard = ({ context, actions }) => {
   const [loading, setLoading] = React.useState(false);
 
   const recordId =
