@@ -29,20 +29,6 @@ export default async function handler(req, res) {
   const url = getRequestUrl(req);
   const rawBody = await readRawBody(req);
 
-  if (process.env.DEBUG_SIGNATURE === "true") {
-    console.log(
-      JSON.stringify({
-        signatureDebug: true,
-        method: req.method,
-        url,
-        timestamp,
-        signatureV3: signatureV3 ? signatureV3.slice(0, 12) : "",
-        signatureV2: signatureV2 ? signatureV2.slice(0, 12) : "",
-        rawBody
-      })
-    );
-  }
-
   const validation = signatureV3
     ? validateHubSpotSignatureV3({
         method: req.method,

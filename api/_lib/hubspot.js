@@ -99,16 +99,6 @@ export function validateHubSpotSignatureV3({
     .digest("base64");
   const expectedBase64Url = expectedBase64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 
-  if (process.env.DEBUG_SIGNATURE === "true") {
-    console.log(
-      JSON.stringify({
-        signatureDebugExpected: true,
-        expectedBase64Prefix: expectedBase64.slice(0, 12),
-        expectedBase64UrlPrefix: expectedBase64Url.slice(0, 12)
-      })
-    );
-  }
-
   if (!matchesSignature(expectedHex, expectedBase64, expectedBase64Url, signature)) {
     return { ok: false, reason: "signature_mismatch" };
   }
@@ -140,16 +130,6 @@ export function validateHubSpotSignatureV2({
     .update(signatureBase)
     .digest("base64");
   const expectedBase64Url = expectedBase64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-
-  if (process.env.DEBUG_SIGNATURE === "true") {
-    console.log(
-      JSON.stringify({
-        signatureDebugExpectedV2: true,
-        expectedBase64Prefix: expectedBase64.slice(0, 12),
-        expectedBase64UrlPrefix: expectedBase64Url.slice(0, 12)
-      })
-    );
-  }
 
   if (!matchesSignature(expectedHex, expectedBase64, expectedBase64Url, signature)) {
     return { ok: false, reason: "signature_mismatch" };
