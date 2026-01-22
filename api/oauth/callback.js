@@ -44,12 +44,7 @@ export default async function handler(req, res) {
     res.status(200).json({
       success: true,
       message: "OAuth success",
-      data: {
-        hub_id: json.hub_id,
-        access_token: json.access_token,
-        refresh_token: json.refresh_token,
-        expires_in: json.expires_in
-      }
+      hub_id: json.hub_id
     });
   } catch (err) {
     res.status(500).json({ error: "OAuth request failed" });
