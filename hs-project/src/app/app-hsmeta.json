@@ -8,7 +8,7 @@
     "auth": {
       "type": "oauth",
       "redirectUrls": [
-        "https://your-backend.example.com/oauth/callback"
+        "https://embed.lineaer.dk/ui_demo/api/oauth/callback"
       ],
       "requiredScopes": [
         "oauth",
@@ -21,7 +21,7 @@
     "permittedUrls": {
       "fetch": [
         "https://api.hubapi.com",
-        "https://your-backend.example.com"
+        "https://embed.lineaer.dk"
       ],
       "iframe": [],
       "img": []
