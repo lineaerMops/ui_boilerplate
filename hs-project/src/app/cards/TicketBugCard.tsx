@@ -20,8 +20,8 @@ const TicketBugCard = ({ context, actions }) => {
     context.crmObjectId ||
     context?.crm?.recordId;
 
-  const pipelineStage = properties?.hs_pipeline_stage || "-";
-  const pipelineId = properties?.hs_pipeline || "-";
+  const pipelineStage = properties?.properties?.hs_pipeline_stage || "-";
+  const pipelineId = properties?.properties?.hs_pipeline || "-";
   const contactIdByTypeId =
     contactAssociationsByTypeId?.results?.[0]?.id ||
     contactAssociationsByTypeId?.[0]?.id ||
@@ -35,9 +35,6 @@ const TicketBugCard = ({ context, actions }) => {
   const contactId = contactIdByTypeId || contactIdByName || "-";
   const debugInfo = {
     objectTypeId: context.crm?.objectTypeId,
-    pipelineStage: properties?.hs_pipeline_stage,
-    pipeline: properties?.hs_pipeline,
-    properties,
     assocTypeIdCount: contactAssociationsByTypeId?.results?.length ?? contactAssociationsByTypeId?.length ?? 0,
     assocTypeIdFirst: contactIdByTypeId || null,
     assocNameCount: contactAssociationsByName?.results?.length ?? contactAssociationsByName?.length ?? 0,
@@ -86,9 +83,6 @@ const TicketBugCard = ({ context, actions }) => {
       <Text format={{ color: "secondary" }}>Pipeline: {pipelineId}</Text>
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
       <Text>{contactId}</Text>
-      <Text format={{ color: "secondary" }}>
-        Debug: {JSON.stringify(debugInfo)}
-      </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
