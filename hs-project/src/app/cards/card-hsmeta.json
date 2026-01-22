@@ -1,0 +1,12 @@
+{
+  "uid": "card-ui_demo",
+  "type": "card",
+  "config": {
+    "name": "Ticket Bug Card",
+    "location": "crm.record.sidebar",
+    "entrypoint": "/app/cards/NewCard.tsx",
+    "objectTypes": [
+      "tickets"
+    ]
+  }
+}

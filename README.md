@@ -42,6 +42,68 @@ This repository contains:
 - **Portal-Aware**: All operations scoped by `hub_id`
 - **Conservative**: Only documented APIs and behaviors
 
+## Vercel + HubSpot End-to-End Guide
+
+This repo now includes a Vercel backend (serverless) in `api/` and a HubSpot
+Developer Project in `hs-project/`.
+
+### 1) Environment Variables (Vercel)
+
+Create these environment variables in Vercel:
+
+- `HUBSPOT_CLIENT_ID`
+- `HUBSPOT_CLIENT_SECRET`
+- `HUBSPOT_REDIRECT_URI` (e.g. `https://<vercel-app>.vercel.app/oauth/callback`)
+- `N8N_WEBHOOK_URL` (optional)
+
+### 2) Deploy to Vercel
+
+1. Push this repo to GitHub.
+2. In Vercel, import the GitHub repo.
+3. Framework preset: "Other".
+4. The API will deploy as serverless routes under:
+   - `/api/oauth/callback`
+   - `/api/action`
+
+### 3) Update HubSpot App Config
+
+Edit `hs-project/src/app/app-hsmeta.json`:
+
+- `auth.redirectUrls`: set to your Vercel callback URL
+- `permittedUrls.fetch`: include your Vercel base URL
+
+Edit `hs-project/src/app/cards/NewCard.tsx`:
+
+- Update `hubspot.fetch("https://your-backend.example.com/action")` to your Vercel URL
+
+### 4) Upload Project to HubSpot
+
+From the project directory:
+
+```
+cd /Users/benjaminnygaard/Documents/Code/ui_demo/hs-project
+hs project upload
+```
+
+### 5) Install the App (OAuth)
+
+Generate an install URL:
+
+```
+https://app.hubspot.com/oauth/authorize
+?client_id=YOUR_CLIENT_ID
+&redirect_uri=YOUR_REDIRECT_URL
+&scope=oauth+crm.objects.tickets.read+crm.objects.tickets.write
+```
+
+Open it in a browser and approve. HubSpot redirects to your Vercel callback
+endpoint which exchanges the code for tokens.
+
+### 6) Verify in CRM
+
+Open a Ticket record and confirm the card appears in the sidebar. Click the
+button and confirm `/api/action` receives a request.
+
 ## Requirements
 
 - HubSpot Developer Account

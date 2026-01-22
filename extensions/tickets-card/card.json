@@ -1,0 +1,13 @@
+{
+  "type": "crm-card",
+  "location": "crm.record.sidebar",
+  "objectTypes": ["TICKET"],
+  "module": {
+    "file": "card.jsx"
+  },
+  "title": "Ticket Bug Card",
+  "description": "Viser ticket ID og opretter bug",
+  "permittedUrls": {
+    "fetch": ["https://your-backend.example.com"]
+  }
+}
