@@ -64,6 +64,10 @@ Create these environment variables in Vercel:
 4. The API will deploy as serverless routes under:
    - `/api/oauth/callback`
    - `/api/action`
+5. If you want to serve under `/ui_demo`, this repo includes a `vercel.json`
+   rewrite so you can also call:
+   - `/ui_demo/api/oauth/callback`
+   - `/ui_demo/api/action`
 
 ### 3) Update HubSpot App Config
 

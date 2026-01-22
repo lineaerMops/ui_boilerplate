@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/ui_demo/(.*)",
+      "destination": "/$1"
+    }
+  ]
+}
