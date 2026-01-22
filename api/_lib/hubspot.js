@@ -20,6 +20,28 @@ function timingSafeEqual(a, b) {
   return crypto.timingSafeEqual(aBuf, bBuf);
 }
 
+function decodeHubSpotSignatureUri(uri) {
+  // HubSpot v3: decode specific encoded characters in the request URI
+  const replacements = {
+    "%3A": ":",
+    "%2F": "/",
+    "%3F": "?",
+    "%40": "@",
+    "%21": "!",
+    "%24": "$",
+    "%27": "'",
+    "%28": "(",
+    "%29": ")",
+    "%2A": "*",
+    "%2C": ",",
+    "%3B": ";"
+  };
+
+  return uri.replace(/%3A|%2F|%3F|%40|%21|%24|%27|%28|%29|%2A|%2C|%3B/g, (match) =>
+    replacements[match] || match
+  );
+}
+
 function matchesSignature(expectedHex, expectedBase64, expectedBase64Url, signature) {
   return (
     timingSafeEqual(expectedHex, signature) ||
@@ -65,7 +87,8 @@ export function validateHubSpotSignatureV3({
     return { ok: false, reason: "invalid_timestamp" };
   }
 
-  const signatureBase = `${String(method).toUpperCase()}${url}${rawBody || ""}${ts}`;
+  const normalizedUrl = decodeHubSpotSignatureUri(url);
+  const signatureBase = `${String(method).toUpperCase()}${normalizedUrl}${rawBody || ""}${ts}`;
   const expectedHex = crypto
     .createHmac("sha256", clientSecret)
     .update(signatureBase)
