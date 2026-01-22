@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Flex, Text } from "@hubspot/ui-extensions";
 import { hubspot } from "@hubspot/ui-extensions";
+import { useAssociations, useCrmProperties } from "@hubspot/ui-extensions";
 
 hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
   <TicketBugCard context={context} actions={actions} />
@@ -8,6 +9,8 @@ hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
 
 const TicketBugCard = ({ context, actions }) => {
   const [loading, setLoading] = React.useState(false);
+  const properties = useCrmProperties(["hs_pipeline_stage"]);
+  const contactAssociations = useAssociations("0-1");
 
   const recordId =
     context.crm?.objectId ||
@@ -15,6 +18,13 @@ const TicketBugCard = ({ context, actions }) => {
     context.recordId ||
     context.crmObjectId ||
     context?.crm?.recordId;
+
+  const pipelineStage = properties?.hs_pipeline_stage || "-";
+  const contactId =
+    contactAssociations?.results?.[0]?.id ||
+    contactAssociations?.[0]?.id ||
+    contactAssociations?.[0] ||
+    "-";
 
   const handleCreateBug = async () => {
     setLoading(true);
@@ -53,6 +63,10 @@ const TicketBugCard = ({ context, actions }) => {
     <Flex direction="column" gap="small">
       <Text format={{ fontWeight: "bold" }}>Ticket ID</Text>
       <Text>{recordId || "-"}</Text>
+      <Text format={{ fontWeight: "bold" }}>Pipeline stage</Text>
+      <Text>{pipelineStage}</Text>
+      <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
+      <Text>{contactId}</Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
