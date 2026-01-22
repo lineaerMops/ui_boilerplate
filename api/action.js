@@ -1,4 +1,9 @@
-import { getRequestUrl, readRawBody, validateHubSpotSignature } from "./_lib/hubspot.js";
+import {
+  getRequestUrl,
+  readRawBody,
+  validateHubSpotSignatureV2,
+  validateHubSpotSignatureV3
+} from "./_lib/hubspot.js";
 
 export default async function handler(req, res) {
   if (req.method === "OPTIONS") {
@@ -12,19 +17,28 @@ export default async function handler(req, res) {
   }
 
   const clientSecret = process.env.HUBSPOT_CLIENT_SECRET;
-  const signature = req.headers["x-hubspot-signature-v3"] || "";
+  const signatureV3 = req.headers["x-hubspot-signature-v3"] || "";
+  const signatureV2 = req.headers["x-hubspot-signature"] || "";
   const timestamp = req.headers["x-hubspot-request-timestamp"] || "";
   const url = getRequestUrl(req);
   const rawBody = await readRawBody(req);
 
-  const validation = validateHubSpotSignature({
-    method: req.method,
-    url,
-    rawBody,
-    signature,
-    timestamp,
-    clientSecret
-  });
+  const validation = signatureV3
+    ? validateHubSpotSignatureV3({
+        method: req.method,
+        url,
+        rawBody,
+        signature: signatureV3,
+        timestamp,
+        clientSecret
+      })
+    : validateHubSpotSignatureV2({
+        method: req.method,
+        url,
+        rawBody,
+        signature: signatureV2,
+        clientSecret
+      });
 
   if (!validation.ok) {
     res.status(401).json({ error: "Invalid signature", reason: validation.reason });

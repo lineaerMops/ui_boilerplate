@@ -26,7 +26,7 @@ export function getRequestUrl(req) {
   return `${proto}://${host}${req.url}`;
 }
 
-export function validateHubSpotSignature({
+export function validateHubSpotSignatureV3({
   method,
   url,
   rawBody,
@@ -37,13 +37,43 @@ export function validateHubSpotSignature({
   if (!clientSecret) {
     return { ok: false, reason: "missing_client_secret" };
   }
+  if (!signature || !timestamp) {
+    return { ok: false, reason: "missing_signature" };
+  }
 
   const ts = Number(timestamp);
   if (!ts || Math.abs(Date.now() - ts) > 5 * 60 * 1000) {
     return { ok: false, reason: "invalid_timestamp" };
   }
 
-  const signatureBase = `${method}${url}${rawBody || ""}`;
+  const signatureBase = `${String(method).toUpperCase()}${url}${rawBody || ""}${ts}`;
+  const expected = crypto
+    .createHmac("sha256", clientSecret)
+    .update(signatureBase)
+    .digest("hex");
+
+  if (!timingSafeEqual(expected, signature)) {
+    return { ok: false, reason: "signature_mismatch" };
+  }
+
+  return { ok: true };
+}
+
+export function validateHubSpotSignatureV2({
+  method,
+  url,
+  rawBody,
+  signature,
+  clientSecret
+}) {
+  if (!clientSecret) {
+    return { ok: false, reason: "missing_client_secret" };
+  }
+  if (!signature) {
+    return { ok: false, reason: "missing_signature" };
+  }
+
+  const signatureBase = `${String(method).toUpperCase()}${url}${rawBody || ""}`;
   const expected = crypto
     .createHmac("sha256", clientSecret)
     .update(signatureBase)
