@@ -41,11 +41,20 @@ export default async function handler(req, res) {
     }
 
     // TODO: Persist tokens by hub_id (DB, KV, etc.).
-    res.status(200).json({
-      success: true,
-      message: "OAuth success",
-      hub_id: json.hub_id
-    });
+    const redirectMode = String(req.query?.redirect || "").toLowerCase();
+    if (redirectMode === "json") {
+      res.status(200).json({
+        success: true,
+        message: "OAuth success",
+        hub_id: json.hub_id
+      });
+      return;
+    }
+
+    const successUrl = `https://embed.lineaer.dk/ui_demo/connected.html?hub_id=${encodeURIComponent(
+      json.hub_id
+    )}`;
+    res.redirect(302, successUrl);
   } catch (err) {
     res.status(500).json({ error: "OAuth request failed" });
   }

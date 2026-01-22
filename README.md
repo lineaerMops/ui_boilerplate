@@ -68,6 +68,9 @@ Create these environment variables in Vercel:
    rewrite so you can also call:
    - `/ui_demo/api/oauth/callback`
    - `/ui_demo/api/action`
+6. The OAuth callback redirects to a simple success page:
+   - `/ui_demo/connected.html`
+   - Append `?redirect=json` if you want JSON response instead of redirect.
 
 ### 3) Update HubSpot App Config
 
