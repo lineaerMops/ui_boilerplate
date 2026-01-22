@@ -37,6 +37,7 @@ const TicketBugCard = ({ context, actions }) => {
     objectTypeId: context.crm?.objectTypeId,
     pipelineStage: properties?.hs_pipeline_stage,
     pipeline: properties?.hs_pipeline,
+    properties,
     assocTypeIdCount: contactAssociationsByTypeId?.results?.length ?? contactAssociationsByTypeId?.length ?? 0,
     assocTypeIdFirst: contactIdByTypeId || null,
     assocNameCount: contactAssociationsByName?.results?.length ?? contactAssociationsByName?.length ?? 0,
