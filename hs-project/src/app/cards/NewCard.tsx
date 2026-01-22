@@ -9,6 +9,13 @@ hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
 const Extension = ({ context, actions }) => {
   const [loading, setLoading] = React.useState(false);
 
+  const recordId =
+    context.objectId ||
+    context.recordId ||
+    context.crmObjectId ||
+    context.crm?.objectId ||
+    context?.crm?.recordId;
+
   const handleCreateBug = async () => {
     setLoading(true);
     try {
@@ -18,7 +25,7 @@ const Extension = ({ context, actions }) => {
           method: "POST",
           body: {
             objectType: context.objectType,
-            objectId: context.objectId,
+            objectId: recordId,
             hubId: context.portal?.id,
             type: "create bug"
           },
@@ -45,7 +52,7 @@ const Extension = ({ context, actions }) => {
   return (
     <Flex direction="column" gap="small">
       <Text format={{ fontWeight: "bold" }}>Ticket ID</Text>
-      <Text>{context.objectId || "-"}</Text>
+      <Text>{recordId || "-"}</Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
