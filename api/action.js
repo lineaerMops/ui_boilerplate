@@ -1,3 +1,9 @@
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};
+
 import {
   getRequestUrl,
   readRawBody,
