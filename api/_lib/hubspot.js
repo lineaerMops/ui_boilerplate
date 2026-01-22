@@ -23,7 +23,18 @@ function timingSafeEqual(a, b) {
 export function getRequestUrl(req) {
   const host = req.headers["x-forwarded-host"] || req.headers.host;
   const proto = req.headers["x-forwarded-proto"] || "https";
-  return `${proto}://${host}${req.url}`;
+  const originalUrl =
+    req.headers["x-vercel-original-url"] ||
+    req.headers["x-original-url"] ||
+    req.headers["x-rewrite-url"] ||
+    req.headers["x-forwarded-uri"] ||
+    req.url;
+
+  if (typeof originalUrl === "string" && originalUrl.startsWith("http")) {
+    return originalUrl;
+  }
+
+  return `${proto}://${host}${originalUrl}`;
 }
 
 export function validateHubSpotSignatureV3({
