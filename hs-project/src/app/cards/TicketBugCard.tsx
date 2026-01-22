@@ -9,8 +9,9 @@ hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
 
 const TicketBugCard = ({ context, actions }) => {
   const [loading, setLoading] = React.useState(false);
-  const properties = useCrmProperties(["hs_pipeline_stage"]);
-  const contactAssociations = useAssociations("0-1");
+  const properties = useCrmProperties(["hs_pipeline_stage", "hs_pipeline"]);
+  const contactAssociationsByTypeId = useAssociations("0-1");
+  const contactAssociationsByName = useAssociations("contacts");
 
   const recordId =
     context.crm?.objectId ||
@@ -20,11 +21,18 @@ const TicketBugCard = ({ context, actions }) => {
     context?.crm?.recordId;
 
   const pipelineStage = properties?.hs_pipeline_stage || "-";
-  const contactId =
-    contactAssociations?.results?.[0]?.id ||
-    contactAssociations?.[0]?.id ||
-    contactAssociations?.[0] ||
-    "-";
+  const pipelineId = properties?.hs_pipeline || "-";
+  const contactIdByTypeId =
+    contactAssociationsByTypeId?.results?.[0]?.id ||
+    contactAssociationsByTypeId?.[0]?.id ||
+    contactAssociationsByTypeId?.[0] ||
+    "";
+  const contactIdByName =
+    contactAssociationsByName?.results?.[0]?.id ||
+    contactAssociationsByName?.[0]?.id ||
+    contactAssociationsByName?.[0] ||
+    "";
+  const contactId = contactIdByTypeId || contactIdByName || "-";
 
   const handleCreateBug = async () => {
     setLoading(true);
@@ -65,6 +73,7 @@ const TicketBugCard = ({ context, actions }) => {
       <Text>{recordId || "-"}</Text>
       <Text format={{ fontWeight: "bold" }}>Pipeline stage</Text>
       <Text>{pipelineStage}</Text>
+      <Text format={{ color: "secondary" }}>Pipeline: {pipelineId}</Text>
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
       <Text>{contactId}</Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
