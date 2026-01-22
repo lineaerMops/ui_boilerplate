@@ -13,7 +13,7 @@ const Extension = ({ context, actions }) => {
     setLoading(true);
     try {
       const response = await hubspot.fetch(
-        "https://embed.lineaer.dk/ui_demo/api/action",
+        "https://embed.lineaer.dk/api/action",
         {
           method: "POST",
           body: {

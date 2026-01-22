@@ -64,10 +64,9 @@ Create these environment variables in Vercel:
 4. The API will deploy as serverless routes under:
    - `/api/oauth/callback`
    - `/api/action`
-5. If you want to serve under `/ui_demo`, this repo includes a `vercel.json`
-   rewrite so you can also call:
-   - `/ui_demo/api/oauth/callback`
-   - `/ui_demo/api/action`
+5. This repo includes `vercel.json` rewrites for the intro/connected pages under
+   `/ui_demo`. The action endpoint should be called at `/api/action` to avoid
+   signature mismatches.
 6. The OAuth callback redirects to a simple success page:
    - `/ui_demo/connected`
    - Append `?redirect=json` if you want JSON response instead of redirect.
