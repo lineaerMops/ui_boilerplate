@@ -51,7 +51,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    const successUrl = `https://embed.lineaer.dk/ui_demo/connected.html?hub_id=${encodeURIComponent(
+    const successUrl = `https://embed.lineaer.dk/ui_demo/connected?hub_id=${encodeURIComponent(
       json.hub_id
     )}`;
     res.redirect(302, successUrl);

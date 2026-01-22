@@ -3,6 +3,14 @@
     {
       "source": "/ui_demo/(.*)",
       "destination": "/$1"
+    },
+    {
+      "source": "/ui_demo/intro",
+      "destination": "/intro.html"
+    },
+    {
+      "source": "/ui_demo/connected",
+      "destination": "/connected.html"
     }
   ]
 }

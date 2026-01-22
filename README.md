@@ -69,10 +69,10 @@ Create these environment variables in Vercel:
    - `/ui_demo/api/oauth/callback`
    - `/ui_demo/api/action`
 6. The OAuth callback redirects to a simple success page:
-   - `/ui_demo/connected.html`
+   - `/ui_demo/connected`
    - Append `?redirect=json` if you want JSON response instead of redirect.
 7. The install intro page is:
-   - `/ui_demo/intro.html`
+   - `/ui_demo/intro`
 
 ### 3) Update HubSpot App Config
 
