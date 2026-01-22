@@ -33,6 +33,15 @@ const TicketBugCard = ({ context, actions }) => {
     contactAssociationsByName?.[0] ||
     "";
   const contactId = contactIdByTypeId || contactIdByName || "-";
+  const debugInfo = {
+    objectTypeId: context.crm?.objectTypeId,
+    pipelineStage: properties?.hs_pipeline_stage,
+    pipeline: properties?.hs_pipeline,
+    assocTypeIdCount: contactAssociationsByTypeId?.results?.length ?? contactAssociationsByTypeId?.length ?? 0,
+    assocTypeIdFirst: contactIdByTypeId || null,
+    assocNameCount: contactAssociationsByName?.results?.length ?? contactAssociationsByName?.length ?? 0,
+    assocNameFirst: contactIdByName || null
+  };
 
   const handleCreateBug = async () => {
     setLoading(true);
@@ -76,6 +85,9 @@ const TicketBugCard = ({ context, actions }) => {
       <Text format={{ color: "secondary" }}>Pipeline: {pipelineId}</Text>
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
       <Text>{contactId}</Text>
+      <Text format={{ color: "secondary" }}>
+        Debug: {JSON.stringify(debugInfo)}
+      </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
