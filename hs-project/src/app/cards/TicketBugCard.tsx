@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Flex, Text } from "@hubspot/ui-extensions";
 import { hubspot } from "@hubspot/ui-extensions";
-import { useAssociations, useCrmProperties } from "@hubspot/ui-extensions";
+import { useAssociations, useCrmProperties } from "@hubspot/ui-extensions/crm";
 
 hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
   <TicketBugCard context={context} actions={actions} />
