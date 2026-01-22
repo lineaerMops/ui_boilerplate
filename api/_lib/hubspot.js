@@ -20,6 +20,14 @@ function timingSafeEqual(a, b) {
   return crypto.timingSafeEqual(aBuf, bBuf);
 }
 
+function matchesSignature(expectedHex, expectedBase64, expectedBase64Url, signature) {
+  return (
+    timingSafeEqual(expectedHex, signature) ||
+    timingSafeEqual(expectedBase64, signature) ||
+    timingSafeEqual(expectedBase64Url, signature)
+  );
+}
+
 export function getRequestUrl(req) {
   const host = req.headers["x-forwarded-host"] || req.headers.host;
   const proto = req.headers["x-forwarded-proto"] || "https";
@@ -58,12 +66,17 @@ export function validateHubSpotSignatureV3({
   }
 
   const signatureBase = `${String(method).toUpperCase()}${url}${rawBody || ""}${ts}`;
-  const expected = crypto
+  const expectedHex = crypto
     .createHmac("sha256", clientSecret)
     .update(signatureBase)
     .digest("hex");
+  const expectedBase64 = crypto
+    .createHmac("sha256", clientSecret)
+    .update(signatureBase)
+    .digest("base64");
+  const expectedBase64Url = expectedBase64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 
-  if (!timingSafeEqual(expected, signature)) {
+  if (!matchesSignature(expectedHex, expectedBase64, expectedBase64Url, signature)) {
     return { ok: false, reason: "signature_mismatch" };
   }
 
@@ -85,12 +98,17 @@ export function validateHubSpotSignatureV2({
   }
 
   const signatureBase = `${String(method).toUpperCase()}${url}${rawBody || ""}`;
-  const expected = crypto
+  const expectedHex = crypto
     .createHmac("sha256", clientSecret)
     .update(signatureBase)
     .digest("hex");
+  const expectedBase64 = crypto
+    .createHmac("sha256", clientSecret)
+    .update(signatureBase)
+    .digest("base64");
+  const expectedBase64Url = expectedBase64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 
-  if (!timingSafeEqual(expected, signature)) {
+  if (!matchesSignature(expectedHex, expectedBase64, expectedBase64Url, signature)) {
     return { ok: false, reason: "signature_mismatch" };
   }
 
