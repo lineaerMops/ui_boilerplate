@@ -40,7 +40,6 @@ export default async function handler(req, res) {
       return;
     }
 
-    // TODO: Persist tokens by hub_id (DB, KV, etc.).
     const redirectMode = String(req.query?.redirect || "").toLowerCase();
     if (redirectMode === "json") {
       res.status(200).json({
