@@ -12,7 +12,9 @@ const TicketBugCard = ({ context, actions }) => {
   const properties = useCrmProperties(["hs_pipeline_stage", "hs_pipeline"]);
   const { data: contactAssociations } = useAssociations({
     objectTypeId: "0-1",
-    properties: ["firstname", "lastname", "email"]
+    associationTypeId: 16,
+    properties: ["firstname", "lastname", "email"],
+    pageLength: 10
   });
 
   const recordId =
