@@ -16,6 +16,46 @@ This repository contains:
 2. **Follow the Tasks**: Execute `tasks/default-setup.md` step-by-step
 3. **Use the Skills**: Reference `skills/` directory for reusable operations
 
+## Replication Checklist (Per Customer)
+
+Use this checklist whenever you roll out to a new customer or a colleague needs
+to re-run the setup from scratch.
+
+1. **Confirm existing project**: Verify if a HubSpot project already exists in
+   the target account (`hs project list` or Developer Projects UI).
+2. **Confirm backend hosting**: Decide where the backend lives (Vercel or other)
+   before creating the app config.
+3. **Create project**: Use `hs project create` and capture the **project name**
+   exactly as chosen during the prompt.
+4. **Update OAuth + fetch**:
+   - `hs-project/src/app/app-hsmeta.json` → redirect URL + permitted fetch base
+   - `hs-project/src/app/cards/TicketBugCard.tsx` → `hubspot.fetch(...)` URL
+5. **Set Vercel env vars**: `HUBSPOT_CLIENT_ID`, `HUBSPOT_CLIENT_SECRET`,
+   `HUBSPOT_REDIRECT_URI`, optional `N8N_WEBHOOK_URL`.
+6. **Install OAuth**: Build the install URL with correct scopes and install.
+7. **Verify card**: Open a Ticket and confirm ID, pipeline stage, contacts, and
+   the action button.
+
+## Common Pitfalls (Avoid Next Time)
+
+- **Skip discovery**: Always check if a project already exists before creating.
+- **Backend undecided**: Hosting must be decided before OAuth/URLs are set.
+- **Wrong scopes**: Use only documented scopes from
+  https://developers.hubspot.com/docs/apps/legacy-apps/authentication/scopes
+- **Wrong properties**: Discover properties first; then bind UI to real fields.
+- **Signature v3 mismatch**: Use correct URL reconstruction + base64/base64url
+  HMAC; ensure Client Secret matches the app ID.
+- **Associations hook params**: Use documented `useAssociations` params and
+  `toObjectType` values; test with real data.
+
+## Per-Customer Variables
+
+- HubSpot account (portal) + appId
+- OAuth redirect URL (Vercel domain)
+- `hubspot.fetch` base URL (Vercel domain)
+- Required scopes (keep minimal: `oauth`, `tickets`, `crm.objects.contacts.read`)
+- Client Secret in Vercel must match the HubSpot app’s Client Secret
+
 ## Structure
 
 ```
@@ -80,7 +120,7 @@ Edit `hs-project/src/app/app-hsmeta.json`:
 - `auth.redirectUrls`: set to your Vercel callback URL
 - `permittedUrls.fetch`: include your Vercel base URL
 
-Edit `hs-project/src/app/cards/NewCard.tsx`:
+Edit `hs-project/src/app/cards/TicketBugCard.tsx`:
 
 - Update `hubspot.fetch("https://your-backend.example.com/action")` to your Vercel URL
 
@@ -101,7 +141,7 @@ Generate an install URL:
 https://app.hubspot.com/oauth/authorize
 ?client_id=YOUR_CLIENT_ID
 &redirect_uri=YOUR_REDIRECT_URL
-&scope=oauth+crm.objects.tickets.read+crm.objects.tickets.write
+&scope=oauth+tickets+crm.objects.contacts.read
 ```
 
 Open it in a browser and approve. HubSpot redirects to your Vercel callback
