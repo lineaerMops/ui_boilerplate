@@ -75,6 +75,9 @@ const TicketBugCard = ({ context, actions }) => {
       <Text format={{ color: "secondary" }}>Pipeline: {pipelineId}</Text>
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
       <Text>{contactLabel}</Text>
+      <Text format={{ color: "secondary" }}>
+        Debug assoc: {JSON.stringify(contactAssociations)}
+      </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
