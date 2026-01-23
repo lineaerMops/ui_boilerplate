@@ -16,6 +16,7 @@ const TicketBugCard = ({ context, actions }) => {
     error: contactsError
   } = useAssociations({
     toObjectTypeId: "0-1",
+    associationTypeId: 16,
     properties: ["firstname", "lastname", "email"],
     pageLength: 10
   });
@@ -82,7 +83,7 @@ const TicketBugCard = ({ context, actions }) => {
         Debug assoc:{" "}
         {JSON.stringify({
           loading: contactsLoading,
-          error: contactsError || null,
+          error: contactsError?.message || String(contactsError || ""),
           count: contactResults?.length ?? 0,
           firstId: firstContact?.id || null,
           firstProps: firstContact?.properties || null
