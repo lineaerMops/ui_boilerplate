@@ -15,7 +15,7 @@ const TicketBugCard = ({ context, actions }) => {
     isLoading: contactsLoading,
     error: contactsError
   } = useAssociations({
-    toObjectTypeId: "0-1",
+    toObjectType: "contacts",
     associationTypeId: 16,
     properties: ["firstname", "lastname", "email"],
     pageLength: 10
