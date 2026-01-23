@@ -82,16 +82,6 @@ const TicketBugCard = ({ context, actions }) => {
           return <Text key={contact?.toObjectId || contact?.id}>{label}</Text>;
         })
       )}
-      <Text format={{ color: "secondary" }}>
-        Debug assoc:{" "}
-        {JSON.stringify({
-          loading: contactsLoading,
-          error: contactsError?.message || String(contactsError || ""),
-          count: contacts.length,
-          firstId: contacts[0]?.toObjectId || contacts[0]?.id || null,
-          firstProps: contacts[0]?.properties || null
-        })}
-      </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
