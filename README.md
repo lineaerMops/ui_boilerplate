@@ -52,9 +52,20 @@ to re-run the setup from scratch.
 
 - HubSpot account (portal) + appId
 - OAuth redirect URL (Vercel domain)
-- `hubspot.fetch` base URL (Vercel domain)
+- `hubspot.fetch` base URL (Vercel domain) — **set in**:
+  - `hs-project/src/app/cards/TicketBugCard.tsx` (`hubspot.fetch(...)`)
+  - `hs-project/src/app/app-hsmeta.json` (`permittedUrls.fetch`)
 - Required scopes (keep minimal: `oauth`, `tickets`, `crm.objects.contacts.read`)
 - Client Secret in Vercel must match the HubSpot app’s Client Secret
+
+## Optional Project Pieces
+
+- **Intro page** (`intro.html`): optional — can be skipped and install URL can be
+  generated directly from HubSpot app settings.
+- **Rewrites** (`vercel.json`): optional — only needed if you want `/ui_demo/*`
+  paths for intro/connected pages.
+- **Project name** (`ui_demo`): update in README and ensure any references match
+  the chosen project name.
 
 
 ## Structure
