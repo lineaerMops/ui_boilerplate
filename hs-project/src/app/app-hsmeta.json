@@ -13,7 +13,7 @@
       "requiredScopes": [
         "oauth",
         "tickets",
-        "contacts"
+        "crm.objects.contacts.read"
       ],
       "optionalScopes": [],
       "conditionallyRequiredScopes": []
