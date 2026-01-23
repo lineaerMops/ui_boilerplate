@@ -15,8 +15,7 @@ const TicketBugCard = ({ context, actions }) => {
     isLoading: contactsLoading,
     error: contactsError
   } = useAssociations({
-    toObjectType: "contacts",
-    associationTypeId: 16,
+    toObjectType: "0-1",
     properties: ["firstname", "lastname", "email"],
     pageLength: 10
   });
@@ -31,7 +30,7 @@ const TicketBugCard = ({ context, actions }) => {
   const pipelineStage = properties?.properties?.hs_pipeline_stage || "-";
   const pipelineId = properties?.properties?.hs_pipeline || "-";
   const firstContact = contactResults?.[0];
-  const contactId = firstContact?.id || "-";
+  const contactId = firstContact?.toObjectId || firstContact?.id || "-";
   const contactName = `${firstContact?.properties?.firstname || ""} ${firstContact?.properties?.lastname || ""}`.trim();
   const contactEmail = firstContact?.properties?.email || "";
   const contactLabel =
