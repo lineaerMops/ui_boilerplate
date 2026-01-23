@@ -29,12 +29,7 @@ const TicketBugCard = ({ context, actions }) => {
 
   const pipelineStage = properties?.properties?.hs_pipeline_stage || "-";
   const pipelineId = properties?.properties?.hs_pipeline || "-";
-  const firstContact = contactResults?.[0];
-  const contactId = firstContact?.toObjectId || firstContact?.id || "-";
-  const contactName = `${firstContact?.properties?.firstname || ""} ${firstContact?.properties?.lastname || ""}`.trim();
-  const contactEmail = firstContact?.properties?.email || "";
-  const contactLabel =
-    contactName || contactEmail || (contactId !== "-" ? `Contact ${contactId}` : "-");
+  const contacts = contactResults || [];
 
   const handleCreateBug = async () => {
     setLoading(true);
@@ -77,15 +72,24 @@ const TicketBugCard = ({ context, actions }) => {
       <Text>{pipelineStage}</Text>
       <Text format={{ color: "secondary" }}>Pipeline: {pipelineId}</Text>
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
-      <Text>{contactLabel}</Text>
+      {contacts.length === 0 ? (
+        <Text>-</Text>
+      ) : (
+        contacts.map((contact) => {
+          const name = `${contact?.properties?.firstname || ""} ${contact?.properties?.lastname || ""}`.trim();
+          const email = contact?.properties?.email || "";
+          const label = name || email || `Contact ${contact?.toObjectId || contact?.id}`;
+          return <Text key={contact?.toObjectId || contact?.id}>{label}</Text>;
+        })
+      )}
       <Text format={{ color: "secondary" }}>
         Debug assoc:{" "}
         {JSON.stringify({
           loading: contactsLoading,
           error: contactsError?.message || String(contactsError || ""),
-          count: contactResults?.length ?? 0,
-          firstId: firstContact?.id || null,
-          firstProps: firstContact?.properties || null
+          count: contacts.length,
+          firstId: contacts[0]?.toObjectId || contacts[0]?.id || null,
+          firstProps: contacts[0]?.properties || null
         })}
       </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
