@@ -10,8 +10,10 @@ hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
 const TicketBugCard = ({ context, actions }) => {
   const [loading, setLoading] = React.useState(false);
   const properties = useCrmProperties(["hs_pipeline_stage", "hs_pipeline"]);
-  const contactAssociationsByTypeId = useAssociations("0-1");
-  const contactAssociationsByName = useAssociations("contacts");
+  const { data: contactAssociations } = useAssociations({
+    objectTypeId: "0-1",
+    properties: ["firstname", "lastname", "email"]
+  });
 
   const recordId =
     context.crm?.objectId ||
@@ -22,24 +24,12 @@ const TicketBugCard = ({ context, actions }) => {
 
   const pipelineStage = properties?.properties?.hs_pipeline_stage || "-";
   const pipelineId = properties?.properties?.hs_pipeline || "-";
-  const contactIdByTypeId =
-    contactAssociationsByTypeId?.results?.[0]?.id ||
-    contactAssociationsByTypeId?.[0]?.id ||
-    contactAssociationsByTypeId?.[0] ||
-    "";
-  const contactIdByName =
-    contactAssociationsByName?.results?.[0]?.id ||
-    contactAssociationsByName?.[0]?.id ||
-    contactAssociationsByName?.[0] ||
-    "";
-  const contactId = contactIdByTypeId || contactIdByName || "-";
-  const debugInfo = {
-    objectTypeId: context.crm?.objectTypeId,
-    assocTypeIdCount: contactAssociationsByTypeId?.results?.length ?? contactAssociationsByTypeId?.length ?? 0,
-    assocTypeIdFirst: contactIdByTypeId || null,
-    assocNameCount: contactAssociationsByName?.results?.length ?? contactAssociationsByName?.length ?? 0,
-    assocNameFirst: contactIdByName || null
-  };
+  const firstContact = contactAssociations?.results?.[0];
+  const contactId = firstContact?.id || "-";
+  const contactName = `${firstContact?.properties?.firstname || ""} ${firstContact?.properties?.lastname || ""}`.trim();
+  const contactEmail = firstContact?.properties?.email || "";
+  const contactLabel =
+    contactName || contactEmail || (contactId !== "-" ? `Contact ${contactId}` : "-");
 
   const handleCreateBug = async () => {
     setLoading(true);
@@ -82,7 +72,7 @@ const TicketBugCard = ({ context, actions }) => {
       <Text>{pipelineStage}</Text>
       <Text format={{ color: "secondary" }}>Pipeline: {pipelineId}</Text>
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
-      <Text>{contactId}</Text>
+      <Text>{contactLabel}</Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
