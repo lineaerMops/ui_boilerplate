@@ -10,9 +10,12 @@ hubspot.extend<"crm.record.sidebar">(({ context, actions }) => (
 const TicketBugCard = ({ context, actions }) => {
   const [loading, setLoading] = React.useState(false);
   const properties = useCrmProperties(["hs_pipeline_stage", "hs_pipeline"]);
-  const { data: contactAssociations } = useAssociations({
-    objectTypeId: "0-1",
-    associationTypeId: 16,
+  const {
+    results: contactResults,
+    isLoading: contactsLoading,
+    error: contactsError
+  } = useAssociations({
+    toObjectTypeId: "0-1",
     properties: ["firstname", "lastname", "email"],
     pageLength: 10
   });
@@ -26,7 +29,7 @@ const TicketBugCard = ({ context, actions }) => {
 
   const pipelineStage = properties?.properties?.hs_pipeline_stage || "-";
   const pipelineId = properties?.properties?.hs_pipeline || "-";
-  const firstContact = contactAssociations?.results?.[0];
+  const firstContact = contactResults?.[0];
   const contactId = firstContact?.id || "-";
   const contactName = `${firstContact?.properties?.firstname || ""} ${firstContact?.properties?.lastname || ""}`.trim();
   const contactEmail = firstContact?.properties?.email || "";
@@ -76,7 +79,14 @@ const TicketBugCard = ({ context, actions }) => {
       <Text format={{ fontWeight: "bold" }}>Associated contact</Text>
       <Text>{contactLabel}</Text>
       <Text format={{ color: "secondary" }}>
-        Debug assoc: {JSON.stringify(contactAssociations)}
+        Debug assoc:{" "}
+        {JSON.stringify({
+          loading: contactsLoading,
+          error: contactsError || null,
+          count: contactResults?.length ?? 0,
+          firstId: firstContact?.id || null,
+          firstProps: firstContact?.properties || null
+        })}
       </Text>
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
