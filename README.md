@@ -56,20 +56,18 @@ to re-run the setup from scratch.
 - Required scopes (keep minimal: `oauth`, `tickets`, `crm.objects.contacts.read`)
 - Client Secret in Vercel must match the HubSpot app’s Client Secret
 
-### Optional: HubSpot Success URL (Installed App Overview)
+### Optional: HubSpot Success URL (Generic)
 
 If you want the OAuth callback to redirect back into HubSpot (instead of a local
-`/connected` page), you can add **env vars** and construct a URL like:
+`/connected` page), you can use a generic integrations overview URL that only
+requires `hub_id` (portalId):
 
 ```
-https://app-eu1.hubspot.com/integrations-settings/{portalId}/installed/framework/{appId}/overview?accountId={accountEmail}
+https://app.hubspot.com/integrations-settings/{hub_id}
 ```
 
-Suggested env vars (per customer):
-- `HUBSPOT_APP_ID`
-- `HUBSPOT_PORTAL_ID`
-
-Then build the redirect URL using those values in `api/oauth/callback.js`.
+You get `hub_id` from the OAuth token response. Use it to build the redirect
+URL in `api/oauth/callback.js`.
 
 ## Structure
 
