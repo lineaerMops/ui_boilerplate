@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Flex, Text } from "@hubspot/ui-extensions";
+import { Button, Inline, Select, Flex, Text } from "@hubspot/ui-extensions";
 import { hubspot } from "@hubspot/ui-extensions";
 import { useAssociations, useCrmProperties } from "@hubspot/ui-extensions/crm";
 
@@ -82,9 +82,23 @@ const TicketBugCard = ({ context, actions }) => {
           return <Text key={contact?.toObjectId || contact?.id}>{label}</Text>;
         })
       )}
+      <Inline gap="small" align="end" justify="start">
+      <Select
+          label="Type"
+          options={[
+            { label: "Task", value: "task" },
+            { label: "PBI", value: "pbi" },
+            { label: "Bug", value: "bug" },
+            { label: "Webintegration", value: "webintegration" },
+            { label: "Feature", value: "feature" },
+          ]}
+          name="type"
+        />
+
       <Button variant="primary" onClick={handleCreateBug} disabled={loading}>
         {loading ? "Opretter..." : "Opret bug"}
       </Button>
+      </Inline>
     </Flex>
   );
 };
