@@ -82,7 +82,7 @@ const TicketBugCard = ({ context, actions }) => {
           return <Text key={contact?.toObjectId || contact?.id}>{label}</Text>;
         })
       )}
-      <Inline gap="small" align="end" justify="start">
+      <Inline gap="small" align="stretch" justify="start">
       <Select
           label="Type"
           options={[
