@@ -38,3 +38,5 @@ hubspot.config.json
 *.tmp
 *.temp
 .cache/
+.vercel
+.env*.local

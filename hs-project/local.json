@@ -1,0 +1,5 @@
+{
+    "proxy": {
+      "https://example.com": "http://localhost:8080"
+    }
+  }
